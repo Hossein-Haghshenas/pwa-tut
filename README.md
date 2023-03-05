@@ -37,3 +37,21 @@ One of the main benefits of Service Workers is the ability to provide offline ca
 Another important feature of Service Workers is the ability to receive push notifications. When a push notification is sent to the PWA, the Service Worker receives it and can display a notification to the user, even if the PWA is not currently open in the browser.
 
 Overall, Service Workers are a powerful tool that can help PWAs deliver a faster, more reliable, and more engaging user experience, both online and offline.
+
+## **Service Worker life cycle**
+
+A service worker is a type of web worker that runs in the background of a web page, allowing it to intercept network requests and cache resources for offline use. The life cycle of a service worker can be broken down into four stages: registration, installation, activation, and update.
+
+- **Registration**:
+  When a web page requests to register a service worker, the browser checks if it has already been registered. If not, it downloads the service worker file and runs it. The service worker file must be hosted on the same domain as the web page or on a subdomain.
+
+- **Installation**:
+  After the service worker file is downloaded, the browser installs it. During the installation process, the service worker can pre-cache resources that it will need for offline use. If the service worker is installed successfully, it moves on to the activation stage.
+
+- **Activation**:
+  Once the service worker is installed, it is activated. During the activation process, the service worker can clean up any resources from previous versions, update the cache, and start intercepting network requests. If the service worker fails to activate, it remains in a "waiting" state until the next time the web page is loaded.
+
+- **Update**:
+  If the browser detects that the service worker file has changed, it will download and install the new version in the background. Once the new version is installed, the browser will wait for the web page to be reloaded before activating it.
+
+Overall, the service worker life cycle allows for efficient and reliable caching of resources, enabling web pages to work offline and load more quickly on subsequent visits.
