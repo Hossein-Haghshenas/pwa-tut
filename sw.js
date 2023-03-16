@@ -9,6 +9,7 @@ const assets = [
   "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css",
   "https://fonts.googleapis.com/icon?family=Material+Icons",
   "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js",
+  "https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2",
 ];
 // install service worker
 self.addEventListener("install", (e) => {
@@ -24,4 +25,9 @@ self.addEventListener("activate", (e) => {
 // fetch event
 self.addEventListener("fetch", (e) => {
   // console.log("fetch event", e);
+  e.respondWith(
+    caches.match(e.request).then((cacheRes) => {
+      return cacheRes || fetch(e.request);
+    })
+  );
 });
