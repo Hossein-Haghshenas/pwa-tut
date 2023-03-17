@@ -1,4 +1,5 @@
 const staticCacheName = "site-static-v-0.1";
+const dynamicCache = "site-dynamic-v-0.1";
 const assets = [
   "/",
   "./index.html",
@@ -30,9 +31,21 @@ self.addEventListener("activate", (e) => {
 // fetch event
 self.addEventListener("fetch", (e) => {
   // console.log("fetch event", e);
+
+  // check if request is made by chrome extensions or web page
+  // if request is made for web page url must contains http.
+  if (!(e.request.url.indexOf("http") === 0)) return;
+  // skip the request. if request is not made with http protocol
   e.respondWith(
-    caches.match(e.request).then((cacheRes) => {
-      return cacheRes || fetch(e.request);
-    })
+    caches.match(e.request).then(
+      (cacheRes) =>
+        cacheRes ||
+        fetch(e.request).then((fetchRes) =>
+          caches.open(dynamicCache).then((cache) => {
+            cache.put(e.request.url, fetchRes.clone());
+            return fetchRes;
+          })
+        )
+    )
   );
 });
