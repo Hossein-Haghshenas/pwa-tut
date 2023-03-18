@@ -50,6 +50,10 @@ self.addEventListener("fetch", (e) => {
             })
           )
       )
-      .catch(() => caches.match("./assets/pages/fallback.html"))
+      .catch(() => {
+        if (e.request.url.indexOf(".html") > 1) {
+          return caches.match("./assets/pages/fallback.html");
+        }
+      })
   );
 });
