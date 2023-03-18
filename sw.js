@@ -1,5 +1,5 @@
 const staticCacheName = "site-static-v-0.1";
-const dynamicCache = "site-dynamic-v-0.1";
+const dynamicCacheName = "site-dynamic-v-0.1";
 const assets = [
   "/",
   "./index.html",
@@ -24,7 +24,7 @@ self.addEventListener("activate", (e) => {
   // console.log("service worker activated successfully");
   e.waitUntil(
     caches.keys().then((keys) => {
-      return Promise.all(keys.filter((key) => key !== staticCacheName).map((key) => caches.delete(key)));
+      return Promise.all(keys.filter((key) => key !== staticCacheName && key !== dynamicCacheName).map((key) => caches.delete(key)));
     })
   );
 });
@@ -44,7 +44,7 @@ self.addEventListener("fetch", (e) => {
         (cacheRes) =>
           cacheRes ||
           fetch(e.request).then((fetchRes) =>
-            caches.open(dynamicCache).then((cache) => {
+            caches.open(dynamicCacheName).then((cache) => {
               cache.put(e.request.url, fetchRes.clone());
               return fetchRes;
             })
