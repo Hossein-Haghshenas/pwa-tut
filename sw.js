@@ -3,6 +3,7 @@ const dynamicCache = "site-dynamic-v-0.1";
 const assets = [
   "/",
   "./index.html",
+  "./assets/pages/fallback.html",
   "./assets/js/app.js",
   "./assets/js/ui.js",
   "./assets/css/style.css",
@@ -37,15 +38,18 @@ self.addEventListener("fetch", (e) => {
   if (!(e.request.url.indexOf("http") === 0)) return;
   // skip the request. if request is not made with http protocol
   e.respondWith(
-    caches.match(e.request).then(
-      (cacheRes) =>
-        cacheRes ||
-        fetch(e.request).then((fetchRes) =>
-          caches.open(dynamicCache).then((cache) => {
-            cache.put(e.request.url, fetchRes.clone());
-            return fetchRes;
-          })
-        )
-    )
+    caches
+      .match(e.request)
+      .then(
+        (cacheRes) =>
+          cacheRes ||
+          fetch(e.request).then((fetchRes) =>
+            caches.open(dynamicCache).then((cache) => {
+              cache.put(e.request.url, fetchRes.clone());
+              return fetchRes;
+            })
+          )
+      )
+      .catch(() => caches.match("./assets/pages/fallback.html"))
   );
 });
